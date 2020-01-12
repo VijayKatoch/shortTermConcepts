@@ -1,0 +1,70 @@
+
+So Servo is called Servo, because it has feedback and controller. Our RC hobby Servo ( Why it is called RC and is 180 deg, is in below links)
+has potentiometer for feedback, and has a chip internally, that take feedback from pot and implement proportianal controller.
+
+If you need to develop own PID, just by dc motor, encoder, hook to controller board and then implement own PID algorithm.
+
+
+1. 	Why need PID control in hobby DC Servo
+
+	https://electronics.stackexchange.com/questions/332082/why-have-a-pid-controller-for-a-dc-servo-motor
+
+2. 	When Robot or Arm is lifting weight, you need Feedback.
+
+	https://www.robotshop.com/community/forum/t/sensing-servo-feedback/7377
+
+3. 
+	"
+	Hobby servos have internally a position feedback device (a potentiometer) and a proportional controller that takes a PWM signal as a position input. 
+	Strictly speaking, not a PID. The potentiometer is used internally by the proportional controller, and it is assumed that the application will command a 
+	position and trust that the servo will get there after some time. But they don't expose the output of the potentiometer, most of them.
+	"
+	
+	https://forum.allaboutcircuits.com/threads/is-it-possible-to-increase-accuracy-of-a-cheap-hobby-servo.150538/
+
+4. 	
+
+	Internally, the servo contains a DC drive motor (seen on the left in figure above), a built-in driver, control circuitry, and a gear reduction system.
+
+	https://os.mbed.com/users/4180_1/notebook/an-introduction-to-servos/
+	
+5. PID Can be done to any kind of motor (even to RC Servos which already has pot), you only need feedbzck ie closed system
+
+	https://forum.arduino.cc/index.php?topic=93003.0
+	
+6. Hobby Servo dead zone
+
+	https://robotics.stackexchange.com/questions/7997/why-cant-you-buy-continuous-servos-with-absolute-positioning
+	
+	"
+	And to prevent the motor from reaching the dead zone there is typically some hard stop or peg on one of the gears. Due to the prevalence and cheap cost of 
+	these hobby servos, people have found ways to hack them and make them continuous rotation. This typically involves trimming the hard stop and replacing the 
+	potentiometer with a pair of regular resistors. Now to get the servo to spin, you kind of need to trick the control algorithm. The pair of resistors make the 
+	servo think it is always in the middle of its range (for example). Then you command it to go to some other angle, and it spins at some speed to get there, but 
+	since it always thinks it is in the middle, it will spin forever. So what is normally a position command is now a speed command. Voila!
+	"
+	
+7. 	Encoder or Pot is enough
+
+	https://www.robotshop.com/community/forum/t/servo-position-angle-control-using-pid-controller/42507/2
+	
+	https://docs.odriverobotics.com/
+	
+8.	Adding a rotary encoder to hacked Servo
+
+	https://www.robotshop.com/community/forum/t/adding-a-rotary-encoder-to-a-hacked-servo/12999/16
+	
+
+9.	Adafruit doing Similar thing
+
+	https://learn.adafruit.com/analog-feedback-servos/
+	
+	https://github.com/adafruit/Adafruit_Learning_System_Guides/tree/master/Feedback_Servo_Record_and_Play
+	
+
+
+	
+
+	
+	
+	

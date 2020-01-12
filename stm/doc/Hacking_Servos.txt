@@ -1,0 +1,15 @@
+
+1.	PID control of hacked servo
+
+	https://forum.arduino.cc/index.php?topic=626277.0
+	
+	more juise => P gain , D = Disaster but The D you definitely don't need here, that's for systems that are slow to react to a change of input. Your motor reacts instantly on a change of power supplied.
+	The I you may or may not need, depending on your overall system.
+	
+	A PID algorithm as noted bove has virtually no relevance to an integrated proportional RC servo.
+	
+2.	BoB PID Servo controller
+
+	https://hackaday.io/project/13043-bob-pid-servo-controller
+	
+	

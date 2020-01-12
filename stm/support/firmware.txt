@@ -1,0 +1,5 @@
+STM32Cube_FW_G0_V1.3.0
+
+https://www.st.com/content/st_com/en/products/embedded-software/mcu-mpu-embedded-software/stm32-embedded-software/stm32cube-mcu-mpu-packages/stm32cubeg0.html
+
+Used under ../ihm12a1/Drivers/BSP/STM32G0xx_Nucleo

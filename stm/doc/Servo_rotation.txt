@@ -1,0 +1,115 @@
+From motor_control project I found that
+
+Servo can rotate 180 degree. 90 Degree in each direction
+
+===========================================================
+
+Note:
+Right now STM32 Timer Prescale value used
+
+Prescaler = 3200-1;						//3200 from 0
+Auto Reload Register Period = 100-1;	//100
+
+Timer clock Freq is set to 16 MHz
+
+=> PWM frequency = 16MHz / Pre * ARR = 16MHz/ 3200 *100 = 50 Hz (20 ms)
+
+So 1 cycle period is 20 ms (50 Hz).
+
+ARR = 100 Now, pwm_value = Capture compare reg Value.
+If pwm_value = 100. Compare interupt at 100 or at full cycle
+Each unit in Compare reg = 20 ms / 100 = 0.2 ms
+
+Each unit in compare reg ( pwm_value) is 0.2 ms  (50 Hz)
+
+So Duty cycle = (pwm_value entered) * 0.2 ms 
+
+eg :   user_pwm_setvalue(&htim2, TIM_CHANNEL_4, pwm_value);
+
+http://www.micromouseonline.com/2016/02/06/pwm-basics-on-the-stm32-general-purpose-timers/
+
+https://www.waveshare.com/wiki/STM32CubeMX_Tutorial_Series:_PWM
+
+From PiTank, gitHub:
+https://github.com/VijayKatoch/PiTank/blob/master/Software/PiTank/src/hal/raspberryPi/bsp/bsp.h
+
+
+================================================================
+
+MG996R Servo as per data sheet:
+
+Centre = 1.5 ms, Right 90 = 2 ms, Left 90 = 1 ms
+
+Found with motor_control project
+
+Full range is between 0 and 13 for pwm_value (duty cycle)
+0 = No movement
+13 = Extreme Right
+
+Now pwm_value = 13 = 13 * 0.2 ms = 2.6 ms = 90 deg right
+
+01 = 1 * 0.2 ms = 0.2 ms = 90 deg left
+
+07 = 7* 0.2 ms = 1.4 ms = centre
+
+===================================================================
+So from centre to any direction 90, 6 steps are there.
+Each step = 90 /6 = 15 deg
+
+pwm_value = duty cycle = 1 = 1 * 0.2 ms = 0.2 ms = 15 deg 
+
+0 = No motion
+1 = 0.2 = 90 deg left (No mov actually)
+2 = 0.4 = 75 deg left
+3 = 0.6 = 60 deg left
+4 = 0.8 = 45 deg left
+5 = 1.0 = 30 deg left
+6 = 1.2 = 15 deg left
+
+7 = 1.4 = 0 centre 
+
+8  = 1.6 = 15 deg right 
+9  = 1.8 = 30 deg right
+10 = 2.0 = 45 deg right
+11 = 2.2 = 60 deg right
+12 = 2.4 = 75 deg right
+13 = 2.6 = 90 deg right
+
+=======================================================================
+Position Feedback:
+=======================================================================
+https://www.instructables.com/id/Servo-Feedback-Hack-free/
+http://forums.trossenrobotics.com/tutorials/how-to-diy-128/get-position-feedback-from-a-standard-hobby-servo-3279/
+
+For Position Feedback MG996R is hacked by taking out wire from
+potentiometer. It is very easy, its centre pin coming out
+of 3 long pins from motor potentiometer at bottom of PCB.
+
+Voltages observed
+
+13 = 2.6 = 90 deg right = 3.09 V
+1 = 0.2 = 90 deg left = 0.21 V
+7 = 1.4 = 0 centre = 1.5 V
+
+12 = 2.4 = 75 deg right = 2.96 V
+11 = 2.2 = 60 deg right = 2.67 V
+10 = 2.0 = 45 deg right = 2.37 V
+09 = 1.8 = 30 deg right = 2.09 V
+08 = 1.6 = 15 deg right = 1.8  V
+07 = 1.4 = 0 centre  	= 1.5  V
+06 = 1.2 = 15 deg left  = 1.3  V
+05 = 1.0 = 30 deg left  = 0.93 V
+04 = 0.8 = 45 deg left  = 0.64 V
+03 = 0.6 = 60 deg left  = 0.35 V
+02 = 0.4 = 75 deg left  = 0.21 V
+01 = 0.2 = 90 deg left  = 0.21 (No mov actually)
+00 = No motion		    = 0.20 V
+
+So ADC on STM with 3.3 V reference should be enough. NUCLEO-G071RB board can provide 3.3V Vref from 
+CN6 pin4 to CN5 pin8 which is AVDD or Vref. 12 bit ADC can thus give resolution of 0.0008 ( 3.3/4096)
+in each step, which is way more than enough
+we don't need to then use resistors to divide voltage
+
+
+
+

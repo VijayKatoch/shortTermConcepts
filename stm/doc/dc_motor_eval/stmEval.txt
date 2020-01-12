@@ -1,0 +1,54 @@
+https://www.st.com/en/ecosystems/x-nucleo-ihm07m1.html
+
+https://www.st.com/en/ecosystems/stm32-ode-move-actuate-hw.html
+
+https://www.st.com/en/ecosystems/stm32-nucleo-expansion-boards.html
+
+==========================================================================
+
+Brushed DC Motor Driving
+
+X-NUCLEO-IHM04A1
+
+
+	https://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-move-actuate-hw/x-nucleo-ihm04a1.html
+
+	https://os.mbed.com/components/X-NUCLEO-IHM04A1/
+	
+	
+For our board, Low Voltage board ( 1.8 to 10V ) is enough
+
+	X-NUCLEO-IHM12A1 ( This has only 1.3 A rms )
+
+	https://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-move-actuate-hw/x-nucleo-ihm12a1.html
+	
+Another low voltage but high current  (2.6 A rms) and cheaper Problem: Only for one DC motor
+
+	X-NUCLEO-IHM13A1
+
+	https://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-move-actuate-hw/x-nucleo-ihm13a1.html
+	
+
+
+Selected : X-NUCLEO-IHM12A1
+ Taking Risk as max current per motor is 1.3 A rms, and MG 996 on its website says 1400 mA Stall and in datasheet at 2.5A max
+ But I don't think it will be that high 
+
+	https://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-move-actuate-hw/x-nucleo-ihm12a1.html
+
+
+==========================================================================
+
+ARM mbed components
+
+https://os.mbed.com/components/
+
+
+=======================================================================
+Digikey :
+
+Resources: ( Also contain example DC motor that can be used, it looks like MG996R internal 3 pole motor 
+
+https://www.digikey.com/eewiki/display/Motley/How+to+Drive+DC+Motors+with+the+X-NUCLEO-IHM12A1+Shield
+
+

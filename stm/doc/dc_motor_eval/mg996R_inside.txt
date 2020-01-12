@@ -1,0 +1,23 @@
+Tower Pro Inside
+
+1. After cutting open dc motor
+
+It has 3 pole Brushed motor inside, it is also proven with this link below:
+
+	https://www.jsumo.com/mg996-servo-motor-analog 
+
+2. 	On PCB it has three 8 pins, PF6CB FDS 9926A chips, which seems to be Dual-N channel 2.5V MOSFET
+	
+	https://www.mouser.com/datasheet/2/149/FDS9926A-888947.pdf
+	
+	It is used to drive (switch)motor current from supply Vs. In full bridge rectifier setup you need two
+	of these, for 3 pole three to create H Bridge, so that motor can be turned both side
+	
+3.	Two numbers of J3Y transistors in SOT-23 package
+
+4. One unknown 3pin, HT33
+
+	
+	
+	
+	

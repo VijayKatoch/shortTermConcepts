@@ -1,0 +1,19 @@
+https://www.st.com/en/ecosystems/x-nucleo-ihm07m1.html
+
+https://www.st.com/en/ecosystems/stm32-ode-move-actuate-hw.html
+
+https://www.st.com/en/ecosystems/stm32-nucleo-expansion-boards.html
+
+==========================================================================
+
+Brushed DC Motor Driving
+
+X-NUCLEO-IHM04A1
+
+
+	https://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-move-actuate-hw/x-nucleo-ihm04a1.html
+
+	https://os.mbed.com/components/X-NUCLEO-IHM04A1/
+	
+	
+

@@ -1,0 +1,1055 @@
+MG996R SNAM2500 Servo modeling in Matlab
+
+https://in.mathworks.com/matlabcentral/answers/161902-does-anyone-have-a-plant-transfer-function-for-a-hobby-servo-motor-in-other-words-does-anyone-know 
+
+https://engineering.purdue.edu/~andrisan/Courses/AAE451%20Fall2000/
+
+https://engineering.purdue.edu/~andrisan/Courses/AAE451%20Fall2000/Servo.html
+
+================================================================================================================
+
+
+										MATLAB/Simulink Models for the Futaba S-148 Servo
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+servo.m   			====> A Matlab (not Simulink) script to analyze the servo poles and plot a bode plot of the linear servo model
+-----------------------------------------------------------------------------------------------------------------------------------
+%clear
+%disp('Start Here')
+% SYS = TF(NUM,DEN)
+num=[950] 
+den=[1,40,950] 
+system=tf(num,den) 
+poles=roots(den)
+%[Wn,Z] = DAMP(SYS)
+[Wn,Z] = damp(system)
+%[MAG,PHASE,W] = bode(system)
+bode(system)
+%
+% Measured rate limit
+servoRL=252 %Servo rate limit, degree per second
+%
+% Catalog specifications transit time .22 sec/60 degrees
+% Rate limit
+servoRLCatalog=60/.22 % degrees per second (272.727)
+%
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+S148Linear.mdl 		====> A Simulink model of the linear servo.
+-----------------------------------------------------------------------------------------------------------------------------------
+Model {
+  Name			  "S148Linear"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "10.0"
+  Solver		  ode45
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "auto"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "S148Linear"
+    Location		    [528, 289, 986, 454]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Inport
+      Name		      "comand"
+      Position		      [15, 43, 45, 57]
+      Port		      "1"
+      PortWidth		      "-1"
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Futaba S-148 Linear Servo"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [125, 27, 315, 73]
+      ShowPortLabels	      on
+      System {
+	Name			"Futaba S-148 Linear Servo"
+	Location		[415, 543, 926, 681]
+	Open			on
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Inport
+	  Name			  "surface command"
+	  Position		  [35, 43, 65, 57]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Integrator
+	  Name			  "Integrator"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [315, 45, 345, 75]
+	  ExternalReset		  none
+	  InitialConditionSource  internal
+	  InitialCondition	  "0"
+	  LimitOutput		  off
+	  UpperSaturationLimit	  "inf"
+	  LowerSaturationLimit	  "-inf"
+	  ShowSaturationPort	  off
+	  ShowStatePort		  off
+	  AbsoluteTolerance	  "auto"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [115, 42, 145, 73]
+	  Inputs		  "+-"
+	}
+	Block {
+	  BlockType		  TransferFcn
+	  Name			  "Transfer Fcn"
+	  Position		  [220, 42, 275, 78]
+	  Numerator		  "[950]"
+	  Denominator		  "[1 40]"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "surface deflection"
+	  Position		  [415, 53, 445, 67]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "[]"
+	}
+	Line {
+	  SrcBlock		  "surface command"
+	  SrcPort		  1
+	  DstBlock		  "Sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Sum"
+	  SrcPort		  1
+	  DstBlock		  "Transfer Fcn"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Transfer Fcn"
+	  SrcPort		  1
+	  DstBlock		  "Integrator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Integrator"
+	  SrcPort		  1
+	  Points		  [30, 0]
+	  Branch {
+	    Points		    [0, 45; -285, 0; 0, -40]
+	    DstBlock		    "Sum"
+	    DstPort		    2
+	  }
+	  Branch {
+	    DstBlock		    "surface deflection"
+	    DstPort		    1
+	  }
+	}
+	Annotation {
+	  Position		  [256, 22]
+	  Text			  "Futaba S-148 Servo Linear Model"
+	}
+      }
+    }
+    Block {
+      BlockType		      Outport
+      Name		      "deflection"
+      Position		      [365, 43, 395, 57]
+      Port		      "1"
+      OutputWhenDisabled      held
+      InitialOutput	      "[]"
+    }
+    Line {
+      SrcBlock		      "comand"
+      SrcPort		      1
+      DstBlock		      "Futaba S-148 Linear Servo"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Futaba S-148 Linear Servo"
+      SrcPort		      1
+      DstBlock		      "deflection"
+      DstPort		      1
+    }
+  }
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------
+servoNL.mdl 		====> A Simulink model of the nonlinear servo including the rate limit.
+-----------------------------------------------------------------------------------------------------------------------------------
+Model {
+  Name			  "servoNL"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "10.0"
+  Solver		  ode45
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "auto"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "servoNL"
+    Location		    [381, 496, 945, 642]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Inport
+      Name		      "surface command (deg)"
+      Position		      [40, 68, 70, 82]
+      Port		      "1"
+      PortWidth		      "-1"
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Futaba S-148 Nonlinear Model"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [175, 47, 395, 103]
+      ShowPortLabels	      on
+      System {
+	Name			"Futaba S-148 Nonlinear Model"
+	Location		[228, 362, 843, 517]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Inport
+	  Name			  "surface command (deg)"
+	  Position		  [25, 48, 55, 62]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Integrator
+	  Name			  "Integrator"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [430, 50, 460, 80]
+	  ExternalReset		  none
+	  InitialConditionSource  internal
+	  InitialCondition	  "0"
+	  LimitOutput		  off
+	  UpperSaturationLimit	  "inf"
+	  LowerSaturationLimit	  "-inf"
+	  ShowSaturationPort	  off
+	  ShowStatePort		  off
+	  AbsoluteTolerance	  "auto"
+	}
+	Block {
+	  BlockType		  Saturate
+	  Name			  "Rate Limiter (252d/s)"
+	  Position		  [340, 50, 370, 80]
+	  UpperLimit		  "252"
+	  LowerLimit		  "-252"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [130, 47, 160, 78]
+	  Inputs		  "+-"
+	}
+	Block {
+	  BlockType		  TransferFcn
+	  Name			  "Transfer Fcn"
+	  Position		  [235, 47, 290, 83]
+	  Numerator		  "[950]"
+	  Denominator		  "[1 40]"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "surface deflection (deg)"
+	  Position		  [560, 58, 590, 72]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "[]"
+	}
+	Line {
+	  SrcBlock		  "surface command (deg)"
+	  SrcPort		  1
+	  DstBlock		  "Sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Sum"
+	  SrcPort		  1
+	  DstBlock		  "Transfer Fcn"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Integrator"
+	  SrcPort		  1
+	  Points		  [30, 0]
+	  Branch {
+	    Points		    [0, 45; -390, 0; 0, -40]
+	    DstBlock		    "Sum"
+	    DstPort		    2
+	  }
+	  Branch {
+	    DstBlock		    "surface deflection (deg)"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Rate Limiter (252d/s)"
+	  SrcPort		  1
+	  DstBlock		  "Integrator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Transfer Fcn"
+	  SrcPort		  1
+	  DstBlock		  "Rate Limiter (252d/s)"
+	  DstPort		  1
+	}
+	Annotation {
+	  Position		  [281, 27]
+	  Text			  "Futaba S-148 Servo Nonlinear Model"
+	}
+	Annotation {
+	  Position		  [296, 132]
+	  Text			  "Note: It is important for the rate limit to"
+" work  that the input and output units are degrees and not radians."
+	}
+      }
+    }
+    Block {
+      BlockType		      Outport
+      Name		      "surface deflection (deg)"
+      Position		      [485, 68, 515, 82]
+      Port		      "1"
+      OutputWhenDisabled      held
+      InitialOutput	      "[]"
+    }
+    Line {
+      SrcBlock		      "surface command (deg)"
+      SrcPort		      1
+      DstBlock		      "Futaba S-148 Nonlinear Model"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Futaba S-148 Nonlinear Model"
+      SrcPort		      1
+      DstBlock		      "surface deflection (deg)"
+      DstPort		      1
+    }
+  }
+}
+-----------------------------------------------------------------------------------------------------------------------------------
+sim1.mdl 			====> A Simulink model for generating time responsed of both linear and nonlinear servo models.
+-----------------------------------------------------------------------------------------------------------------------------------
+Model {
+  Name			  "sim1"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "1.0"
+  Solver		  ode45
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  ".001"
+  InitialStep		  ".001"
+  FixedStep		  "auto"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "sim1"
+    Location		    [67, 123, 788, 581]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Reference
+      Name		      "Futaba S-148 Linear Servo"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [190, 152, 380, 198]
+      SourceBlock	      "AAE451Lib/Futaba S-148 Linear Servo"
+      SourceType	      "SubSystem"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Futaba S-148 Nonlinear Model"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [185, 237, 405, 293]
+      SourceBlock	      "AAE451Lib/Futaba S-148 Nonlinear Model"
+      SourceType	      "SubSystem"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "Input"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [205, 345, 235, 375]
+      Floating		      off
+      Location		      [20, 414, 344, 653]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "0.5"
+      YMin		      "-35"
+      YMax		      "35"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      on
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Phase Plane For linear Servo"
+      Ports		      [2, 0, 0, 0, 0]
+      Position		      [540, 92, 570, 123]
+      SourceBlock	      "simulink/Sinks/XY Graph"
+      SourceType	      "XY scope."
+      xmin		      "-35"
+      xmax		      "35"
+      ymin		      "-35"
+      ymax		      "35"
+      st		      ".01"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Phase Plane for Nonlinear  Servo"
+      Ports		      [2, 0, 0, 0, 0]
+      Position		      [540, 322, 570, 353]
+      SourceBlock	      "simulink/Sinks/XY Graph"
+      SourceType	      "XY scope."
+      xmin		      "-35"
+      xmax		      "35"
+      ymin		      "-35"
+      ymax		      "35"
+      st		      ".001"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "Scope Linear  Servo"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [495, 160, 525, 190]
+      Floating		      off
+      Location		      [676, 47, 1000, 286]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "0.5"
+      YMin		      "-35"
+      YMax		      "35"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      on
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "Scope Nonlinear  Servo"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [495, 250, 525, 280]
+      Floating		      off
+      Location		      [217, 491, 541, 730]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "0.5"
+      YMin		      "-35"
+      YMax		      "35"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      on
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      SignalGenerator
+      Name		      "Signal\nGenerator"
+      Position		      [65, 160, 95, 190]
+      WaveForm		      sine
+      Amplitude		      "35"
+      Frequency		      "40"
+      Units		      "rad/sec"
+    }
+    Line {
+      SrcBlock		      "Futaba S-148 Linear Servo"
+      SrcPort		      1
+      Points		      [20, 0]
+      Branch {
+	Points			[-5, 0; 0, -60]
+	DstBlock		"Phase Plane For linear Servo"
+	DstPort			2
+      }
+      Branch {
+	DstBlock		"Scope Linear  Servo"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Signal\nGenerator"
+      SrcPort		      1
+      Points		      [5, 0]
+      Branch {
+	Points			[0, 155; 30, 0]
+	Branch {
+	  DstBlock		  "Phase Plane for Nonlinear  Servo"
+	  DstPort		  1
+	}
+	Branch {
+	  Points		  [0, 30]
+	  DstBlock		  "Input"
+	  DstPort		  1
+	}
+      }
+      Branch {
+	Points			[20, 0]
+	Branch {
+	  Points		  [5, 0]
+	  Branch {
+	    Points		    [0, 90]
+	    DstBlock		    "Futaba S-148 Nonlinear Model"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "Futaba S-148 Linear Servo"
+	    DstPort		    1
+	  }
+	}
+	Branch {
+	  Points		  [0, -75]
+	  DstBlock		  "Phase Plane For linear Servo"
+	  DstPort		  1
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Futaba S-148 Nonlinear Model"
+      SrcPort		      1
+      Points		      [35, 0]
+      Branch {
+	Points			[5, 0; 0, 80]
+	DstBlock		"Phase Plane for Nonlinear  Servo"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, 0]
+	DstBlock		"Scope Nonlinear  Servo"
+	DstPort			1
+      }
+    }
+  }
+}
+-----------------------------------------------------------------------------------------------------------------------------------
+AAE451Lib.mdl 		====> A Simulink library containing both linear and nonlinear servo models.
+-----------------------------------------------------------------------------------------------------------------------------------
+
+Library {
+  Name			  "AAE451Lib"
+  Version		  2.20
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "AAE451Lib"
+    Location		    [33, 351, 533, 611]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      SubSystem
+      Name		      "Futaba S-148 Linear Servo"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [50, 32, 240, 78]
+      ShowPortLabels	      on
+      System {
+	Name			"Futaba S-148 Linear Servo"
+	Location		[415, 543, 926, 681]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Inport
+	  Name			  "surface command"
+	  Position		  [35, 43, 65, 57]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Integrator
+	  Name			  "Integrator"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [315, 45, 345, 75]
+	  ExternalReset		  none
+	  InitialConditionSource  internal
+	  InitialCondition	  "0"
+	  LimitOutput		  off
+	  UpperSaturationLimit	  "inf"
+	  LowerSaturationLimit	  "-inf"
+	  ShowSaturationPort	  off
+	  ShowStatePort		  off
+	  AbsoluteTolerance	  "auto"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [115, 42, 145, 73]
+	  Inputs		  "+-"
+	}
+	Block {
+	  BlockType		  TransferFcn
+	  Name			  "Transfer Fcn"
+	  Position		  [220, 42, 275, 78]
+	  Numerator		  "[950]"
+	  Denominator		  "[1 40]"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "surface deflection"
+	  Position		  [415, 53, 445, 67]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "[]"
+	}
+	Line {
+	  SrcBlock		  "Integrator"
+	  SrcPort		  1
+	  Points		  [30, 0]
+	  Branch {
+	    DstBlock		    "surface deflection"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, 45; -285, 0; 0, -40]
+	    DstBlock		    "Sum"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Transfer Fcn"
+	  SrcPort		  1
+	  DstBlock		  "Integrator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Sum"
+	  SrcPort		  1
+	  DstBlock		  "Transfer Fcn"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "surface command"
+	  SrcPort		  1
+	  DstBlock		  "Sum"
+	  DstPort		  1
+	}
+	Annotation {
+	  Position		  [256, 22]
+	  Text			  "Futaba S-148 Servo Linear Model"
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Futaba S-148 Nonlinear Model"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [40, 117, 260, 173]
+      ShowPortLabels	      on
+      System {
+	Name			"Futaba S-148 Nonlinear Model"
+	Location		[228, 362, 843, 517]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Inport
+	  Name			  "surface command (deg)"
+	  Position		  [25, 48, 55, 62]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Integrator
+	  Name			  "Integrator"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [430, 50, 460, 80]
+	  ExternalReset		  none
+	  InitialConditionSource  internal
+	  InitialCondition	  "0"
+	  LimitOutput		  off
+	  UpperSaturationLimit	  "inf"
+	  LowerSaturationLimit	  "-inf"
+	  ShowSaturationPort	  off
+	  ShowStatePort		  off
+	  AbsoluteTolerance	  "auto"
+	}
+	Block {
+	  BlockType		  Saturate
+	  Name			  "Rate Limiter (252d/s)"
+	  Position		  [340, 50, 370, 80]
+	  UpperLimit		  "252"
+	  LowerLimit		  "-252"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [130, 47, 160, 78]
+	  Inputs		  "+-"
+	}
+	Block {
+	  BlockType		  TransferFcn
+	  Name			  "Transfer Fcn"
+	  Position		  [235, 47, 290, 83]
+	  Numerator		  "[950]"
+	  Denominator		  "[1 40]"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "surface deflection (deg)"
+	  Position		  [560, 58, 590, 72]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "[]"
+	}
+	Line {
+	  SrcBlock		  "Transfer Fcn"
+	  SrcPort		  1
+	  DstBlock		  "Rate Limiter (252d/s)"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Rate Limiter (252d/s)"
+	  SrcPort		  1
+	  DstBlock		  "Integrator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Integrator"
+	  SrcPort		  1
+	  Points		  [30, 0]
+	  Branch {
+	    DstBlock		    "surface deflection (deg)"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, 45; -390, 0; 0, -40]
+	    DstBlock		    "Sum"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Sum"
+	  SrcPort		  1
+	  DstBlock		  "Transfer Fcn"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "surface command (deg)"
+	  SrcPort		  1
+	  DstBlock		  "Sum"
+	  DstPort		  1
+	}
+	Annotation {
+	  Position		  [296, 132]
+	  Text			  "Note: It is important for the rate limit to"
+" work  that the input and output units are degrees and not radians."
+	}
+	Annotation {
+	  Position		  [281, 27]
+	  Text			  "Futaba S-148 Servo Nonlinear Model"
+	}
+      }
+    }
+  }
+}
