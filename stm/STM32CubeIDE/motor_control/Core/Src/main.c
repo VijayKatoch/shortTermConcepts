@@ -122,6 +122,8 @@ int main(void)
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); 	/* LED LD4 */
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4); 	/* Motor */
   /* USER CODE END 2 */
+ 
+ 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

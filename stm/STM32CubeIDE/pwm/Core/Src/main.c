@@ -100,6 +100,8 @@ int main(void)
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, strlen(msg), 0xFFFF);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   /* USER CODE END 2 */
+ 
+ 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

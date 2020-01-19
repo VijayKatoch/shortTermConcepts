@@ -116,6 +116,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   printf("\r\nEnter 2 digit PWM value 1 unit = 0.2 ms \r\nCentre = 1.5 ms, Right 90 = 2 ms, Left 90 = 1 ms \n\r");
   /* USER CODE END 2 */
+ 
+ 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

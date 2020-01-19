@@ -1,0 +1,22 @@
+As recommended by Society of Robotics Tutorials, Worm Gears are suitable for robot arm.
+
+	https://www.societyofrobots.com/mechanics_gears.shtml
+
+	- Self Lockable or not back-drivable.
+	- High Torque
+
+Selected Motor :
+
+JGY-370 type from Aliexpress store front of ShenZhen ChiMing Motor co. pvt. ltd
+
+	https://www.aliexpress.com/item/32866693179.html
+
+	DC 6V, 30 RPM
+
+	As shown in table, it provides
+	2.7 Kg/cm Load torque and 4.6 Kg/cm Stall Torque at 0.6A and 1.8 A current.
+	Currents can be handled by our selected motor driver board x-nucleo-ihm12a1
+
+	4.6 Kg/m stall torque, can thus hold approx. 460 gm load at 20 cm long distance
+	(assume equally distributed at 10 cm length)
+	

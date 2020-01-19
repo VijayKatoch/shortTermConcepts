@@ -127,7 +127,7 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 #if CONSOLE_CONTROL
-  printf("Enter 01 for FWD dir or 02 for REV dir of Motor 0. Anything else to stop v1\r\n");
+  printf("Enter 01 for FWD dir or 02 for REV dir of Motor 0. Anything else to stop motor\r\n");
 #endif
   /* Configure KEY Button */
     BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_EXTI);
@@ -174,6 +174,8 @@ int main(void)
     BSP_MotorControl_SetBridgeInputPwmFreq(1,10000);
 
   /* USER CODE END 2 */
+ 
+ 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
