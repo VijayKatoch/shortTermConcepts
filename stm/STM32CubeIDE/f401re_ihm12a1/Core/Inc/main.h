@@ -32,7 +32,9 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "x_nucleo_ihmxx.h"
+#include "stspin240_250.h"
+#include "x_nucleo_ihm12a1_stm32f4xx.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
