@@ -30,7 +30,8 @@ namespace KATBOT
       float getSetPoint();
       float getInput();
       std::uint32_t getSampleTimeinMS();
-      void setActive(bool _active);
+      void setMode(bool _active);
+      void setControllerDirection(bool _direct);
 
     private:
       void reset();
@@ -39,7 +40,8 @@ namespace KATBOT
       float Itotal, prevInput, prevError;
       float minLimit, maxLimit;
       std::uint32_t sampleTime;
-      float active;
+      bool isAutoMode;
+      bool isControllerDirectionDirect;
   };
 }   /*PID_CTRL*/
 

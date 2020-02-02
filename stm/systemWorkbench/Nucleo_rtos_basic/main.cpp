@@ -1,5 +1,5 @@
 #include "mbed.h"
-#include "rtos.h"
+#include "mbed_events.h"
 #include "pid.h"
 #include "STSpin240_250.h"
 
@@ -29,8 +29,11 @@ typedef struct PID_gain
 STSpin240_250 *motor;
 
 static PID_gain_t pDefaultGain[MAX_TUNING_PRM] = {
-                                                    { 3.0f, 2.0f, 1.0f }
+                                                    { 0.2f, 0.09f, 1.0f }
                                                 };
+
+Thread t;
+EventQueue queue;
 
 int main()
 {
@@ -38,9 +41,9 @@ int main()
   uint8_t demoStep = 0;
 
   PID pid = PID(pDefaultGain[0].kp, pDefaultGain[0].ki, pDefaultGain[0].kd);
-
-  RtosTimer pid_timer(&pid, &PID::computeISR, osTimerPeriodic);
-  pid_timer.start(pid.getSampleTimeinMS());
+  // Start the event queue
+  t.start(callback(&queue, &EventQueue::dispatch_forever));
+  queue.call_every(pid.getSampleTimeinMS(), &pid, &PID::computeISR);
 
   /* Printing to the console. */
   printf("STARTING MAIN PROGRAM\r\n");
@@ -277,4 +280,3 @@ void my_flag_irq_handler(void)
     }
   }
 }
-

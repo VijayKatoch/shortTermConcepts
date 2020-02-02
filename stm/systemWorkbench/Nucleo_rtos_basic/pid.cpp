@@ -14,12 +14,15 @@ using namespace KATBOT;
 
 PID::PID(float _kp, float _ki, float _kd): kp(_kp), ki(_ki), kd(_kd)
 {
-  reset();
-  output = 0;
   input = 0;
+  output = 0;
+  setPoint = 0;
   sampleTime = 1000;
+  isAutoMode = true;
+  isControllerDirectionDirect = true;
 
   setOutputLimits(0, 255);
+  reset();
 }
 
 PID::PID()
@@ -46,12 +49,21 @@ void PID::setInput(float _input)
   */
 void PID::setTunings(float _kp, float _ki, float _kd)
 {
+  if(_kp<0 || _ki<0 || _kd<0) return;
+
   float sampleTimeinSec = ((float)sampleTime)/1000;
   kp = _kp;
   ki = _ki * sampleTimeinSec;
   kd = _kd / sampleTimeinSec;
 
-  //reset();
+  if(!isControllerDirectionDirect)
+  {
+    kp = (0 - kp);
+    ki = (0 - ki);
+    kd = (0 - kd);
+  }
+
+
 }
 
 void PID::setOutputLimits(float _min, float _max)
@@ -63,7 +75,7 @@ void PID::setOutputLimits(float _min, float _max)
   maxLimit = _max;
 }
 
-void PID::setSampleTimeinMS(std::uint32_t newSampleTime)
+void PID::setSampleTimeinMS(uint32_t newSampleTime)
 {
   if(newSampleTime > 0)
   {
@@ -77,6 +89,8 @@ void PID::setSampleTimeinMS(std::uint32_t newSampleTime)
 
 void PID::computeISR()
 {
+  if(!isAutoMode) return;
+
   float error = setPoint - input;
 
   Itotal += error*ki;
@@ -131,17 +145,25 @@ uint32_t PID::getSampleTimeinMS()
   return sampleTime;
 }
 
-void PID::setActive(bool _active)
+void PID::setMode(bool _auto)
 {
-  if(!active && _active)
+  if(!isAutoMode && _auto)
+  {
+    /* We changed from Manual to Auto mode, reset once */
     reset();
-  active = _active;
+  }
+  isAutoMode = _auto;
+}
+
+void PID::setControllerDirection(bool _direct)
+{
+  isControllerDirectionDirect = _direct;
 }
 
 void PID::reset()
 {
   Itotal = output;
-  prevInput = 0;
+  prevInput = input;
   prevError = 0;
 
   Itotal = min(Itotal, maxLimit);
