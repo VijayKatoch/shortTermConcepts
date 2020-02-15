@@ -5,6 +5,9 @@
 
 #define MAX_TUNING_PRM 1
 
+#define MOTOR_TEST 0
+#define PID_TEST 1
+
 using namespace KATBOT;
 
 void my_error_handler(uint16_t error);
@@ -41,6 +44,7 @@ int main()
   uint8_t demoStep = 0;
 
   PID pid = PID(pDefaultGain[0].kp, pDefaultGain[0].ki, pDefaultGain[0].kd);
+  pid.setSetPoint(22.5);
   // Start the event queue
   t.start(callback(&queue, &EventQueue::dispatch_forever));
   queue.call_every(pid.getSampleTimeinMS(), &pid, &PID::computeISR);
@@ -91,6 +95,7 @@ int main()
   printf("--> Infinite Loop...\r\n");
   while (true)
   {
+#if MOTOR_TEST
     switch (demoStep)
     {
     case 0:
@@ -215,12 +220,15 @@ int main()
       break;
     }
     }
-
+#endif
+#if PID_TEST
     /* Wait for 2 seconds */
     wait_ms(2000);
     printf("pid output = %u\r\n",
         (uint16_t)pid.getOutput());
 
+    pid.setInput(pid.getOutput() * 0.75);
+#endif
     /* Increment demostep*/
     demoStep++;
     if (demoStep > 12)
