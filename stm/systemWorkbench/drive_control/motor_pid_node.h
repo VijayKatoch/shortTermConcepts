@@ -22,6 +22,8 @@ namespace KATBOT
 
     void encoderCallback();
 
+    void pidCallback();
+
     private:
 
   };

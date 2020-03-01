@@ -12,6 +12,8 @@
 #include "STSpin240_250.h"
 #include "motor_driver.h"
 
+#include<cstdint>
+
 namespace KATBOT
 {
   #define MAX_BDC_MOTORS 2
@@ -37,7 +39,7 @@ namespace KATBOT
     private:
       typedef struct MotorParam
       {
-        uint32_t motorId;
+        std::uint32_t motorId;
         BDCMotor::direction_t direction;
       }MotorParam_t;
 

@@ -23,7 +23,7 @@ MotorDriverStmBDC::MotorDriverStmBDC() : motor(0)
 
   for (uint32_t id = 0; id < MAX_BDC_MOTORS; id++)
   {
-    motorParam =
+    motorParam[id] =
     {
         id,
         BDCMotor::FWD
