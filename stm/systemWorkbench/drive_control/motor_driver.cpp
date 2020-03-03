@@ -36,7 +36,7 @@ void MotorDriver::run(uint32_t motorId)
 
 }
 
-void MotorDriver::stop(uint32_t motorId, bool disableBridge = false)
+void MotorDriver::stop(uint32_t motorId, bool disableBridge)
 {
 
 }

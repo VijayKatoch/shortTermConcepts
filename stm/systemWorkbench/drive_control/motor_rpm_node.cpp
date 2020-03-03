@@ -24,5 +24,3 @@ float MotorRPMNode::rpmFromEncoderCount()
 
   return 0.0;
 }
-
-

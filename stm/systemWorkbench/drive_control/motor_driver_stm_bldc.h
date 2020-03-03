@@ -1,12 +1,12 @@
 /*
- * motor_driver_stm_bdc.h
+ * motor_driver_stm_bldc.h
  *
  *  Created on: Feb 16, 2020
  *      Author: Vijay Katoch
  */
 
-#ifndef MOTOR_DRIVER_STM_BDC_H_
-#define MOTOR_DRIVER_STM_BDC_H_
+#ifndef MOTOR_DRIVER_STM_BLDC_H_
+#define MOTOR_DRIVER_STM_BLDC_H_
 
 #include "mbed.h"
 #include "STSpin240_250.h"
@@ -18,23 +18,25 @@ namespace KATBOT
 {
   #define MAX_BDC_MOTORS 2
 
-  class MotorDriverStmBDC : public MotorDriver
+  class MotorDriverStmBLDC : public MotorDriver
   {
     public:
 
-    MotorDriverStmBDC();
+    MotorDriverStmBLDC();
 
-    void init();
+    virtual void init();
 
-    void setDirection(std::uint32_t motorId, std::uint32_t direction);
+    virtual void setDirection(std::uint32_t motorId, std::uint32_t direction);
 
-    void setSpeed(std::uint32_t motorId, std::uint32_t speed);
+    virtual void setSpeed(std::uint32_t motorId, std::uint32_t speed);
 
-    void run(std::uint32_t motorId);
+    virtual void run(std::uint32_t motorId);
 
-    void stop(uint32_t motorId, bool disableBridge = false);
+    virtual void stop(uint32_t motorId, bool disableBridge = false);
+    
+    static void initStmBLDC(STSpin240_250 *motor);
 
-    virtual ~MotorDriverStmBDC();
+    virtual ~MotorDriverStmBLDC();
 
     private:
       typedef struct MotorParam
@@ -52,4 +54,4 @@ namespace KATBOT
 }
 
 
-#endif /* MOTOR_DRIVER_STM_BDC_H_ */
+#endif /* MOTOR_DRIVER_STM_BLDC_H_ */

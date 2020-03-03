@@ -9,47 +9,42 @@
 #include <assert.h>
 
 using namespace KATBOT;
+using namespace std;
 
 void Motor::setMotorDriver(MotorDriver* md)
 {
-  assert(md!=nullptr);
+  assert(md!=NULL);
   motorDriver = md;
 
 }
 
 void Motor::init()
 {
-  assert(motorDriver!=nullptr);
+  assert(motorDriver!=NULL);
   motorDriver->init();
 }
 
 void Motor::setDirection(uint32_t motorId, uint32_t direction)
 {
-  assert(motorDriver!=nullptr);
+  assert(motorDriver!=NULL);
   motorDriver->setDirection(motorId, direction);
 }
 
 void Motor::setSpeed(uint32_t motorId, uint32_t speed)
 {
-  assert(motorDriver!=nullptr);
+  assert(motorDriver!=NULL);
   motorDriver->setSpeed(motorId, speed);
 }
 
 
 void Motor::run(uint32_t motorId)
 {
-  assert(motorDriver!=nullptr);
+  assert(motorDriver!=NULL);
   motorDriver->run(motorId);
 }
 
-void Motor::stop(uint32_t motorId, bool disableBridge = false)
+void Motor::stop(uint32_t motorId, bool disableBridge)
 {
-  assert(motorDriver!=nullptr);
+  assert(motorDriver!=NULL);
   motorDriver->stop(motorId, disableBridge);
 }
-
-
-
-
-
-

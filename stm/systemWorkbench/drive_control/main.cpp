@@ -1,12 +1,12 @@
 #include "motor.h"
-#include "motor_driver_stm_bdc.h"
+#include "stm_bldc_motor.h"
 
 using namespace KATBOT;
 
 void main()
 {
-  Motor *motor = new MotorDriverStmBDC();
-  motor->init();
+  Motor *stmBldcMotor = new StmBLDCMotor();
+  stmBldcMotor->init();
 }
 
 

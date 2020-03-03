@@ -9,6 +9,7 @@
 #define MOTOR_H_
 
 #include<cstdint>
+#include <cstddef>
 
 #include "motor_driver.h"
 
@@ -20,7 +21,7 @@ namespace KATBOT
 
       MotorDriver *motorDriver;
 
-      Motor() : motorDriver(nullptr)
+      Motor() : motorDriver(NULL)
       {}
 
       void setMotorDriver(MotorDriver* md);

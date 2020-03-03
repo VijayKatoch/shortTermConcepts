@@ -15,5 +15,3 @@ StmBLDCMotor::StmBLDCMotor()
 {
   motorDriver = new MotorDriverStmBLDC();
 }
-
-
