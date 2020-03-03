@@ -1,4 +1,16 @@
-#include "mbed.h"
+#include "motor.h"
+#include "motor_driver_stm_bdc.h"
+
+using namespace KATBOT;
+
+void main()
+{
+  Motor *motor = new MotorDriverStmBDC();
+  motor->init();
+}
+
+
+/*#include "mbed.h"
 #include "STSpin240_250.h"
 
 #include <std_msgs/String.h>
@@ -31,4 +43,4 @@ int main()
         led1 = !led1;
         wait(0.5);
     }
-}
+}*/
