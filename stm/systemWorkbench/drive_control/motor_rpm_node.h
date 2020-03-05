@@ -24,10 +24,11 @@ namespace KATBOT
       float rpmFromEncoderCount();
 
     private:
+ /*
       ros::Subscriber encoderSub;
       ros::Publisher rpmPub;
       ros::NodeHandle nh, _nh;
-
+*/
   };
 }
 

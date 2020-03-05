@@ -27,7 +27,7 @@ namespace KATBOT
     void pidCallback();
 
     private:
-
+/*
     ros::Subscriber numberSub, encoderSub;
     ros::Publisher motorPub;
     ros::ServiceServer tuningService;
@@ -35,7 +35,7 @@ namespace KATBOT
     ros::NodeHandle nh, _nh;
     ros::Timer controllerTimer;
 
-    PID motor0RPMController, motor1RPMController;
+ */   PID motor0RPMController, motor1RPMController;
 
 
   };
