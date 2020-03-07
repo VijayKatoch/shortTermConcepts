@@ -3,10 +3,12 @@
 
 using namespace KATBOT;
 
-void main()
+int main()
 {
   Motor *stmBldcMotor = new StmBLDCMotor();
   stmBldcMotor->init();
+  
+  return 0;
 }
 
 

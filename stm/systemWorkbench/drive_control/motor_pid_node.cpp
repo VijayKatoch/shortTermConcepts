@@ -9,22 +9,29 @@
 
 using namespace KATBOT;
 
-MotorPIDNode::MotorPIDNode()
+MotorPIDNode::MotorPIDNode() :targetSub("cmd_target", &MotorPIDNode::targetCallback,this),
+    encoderSub("rpm", &MotorPIDNode::encoderCallback,this)
+{  
+  
+  
+  
+}
+
+void MotorPIDNode::targetCallback(const 
+katbot_msgs::Motor01_Float32 &msg)
 {
 
 }
 
-void MotorPIDNode::numberCallback()
+void MotorPIDNode::encoderCallback(const 
+katbot_msgs::Motor01_Int32 &msg)
 {
 
 }
 
-void MotorPIDNode::encoderCallback()
-{
-
-}
-
+/*
 void MotorPIDNode::pidCallback()
 {
 
 }
+*/
